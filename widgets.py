@@ -72,12 +72,10 @@ class CSVViewer(QMainWindow):
     def load_mentors_csv(self):
         self.mentors_df = self.load_csv()
         print("Mentors data loaded")
-        print(self.mentors_df)
 
     def load_mentees_csv(self):
         self.mentees_df = self.load_csv()
         print("Mentees data loaded")
-        print(self.mentees_df)
 
     def process_data(self):
         '''post request to backend'''
