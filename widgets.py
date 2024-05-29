@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 
 )
 import pandas as pd
-
+import requests
 
 class CSVViewer(QMainWindow):
     def __init__(self):
@@ -71,21 +71,46 @@ class CSVViewer(QMainWindow):
 
     def load_mentors_csv(self):
         self.mentors_df = self.load_csv()
+        print("Mentors data loaded")
+        print(self.mentors_df)
 
     def load_mentees_csv(self):
         self.mentees_df = self.load_csv()
+        print("Mentees data loaded")
+        print(self.mentees_df)
 
     def process_data(self):
         '''post request to backend'''
 
         # process data here self.mentors_df / self.mentees_df
         # Implement your data processing logic here
+        # ict(mentee_data_json mentor_data_json)
+        # ['mentee'] ['mentor']
+        # request to http://127.0.0.1:5000/csv
         if self.mentors_df is None or self.mentees_df is None:
             self.status_label.setText(
                 "Can not process without uploading both CSVs")
 
-        # self.mentor_mentee_matrix
+        self.status_label.setText("Data processing in progress...")
 
+        # make a request to  /csv
+        data = self.convert_csv_to_json()
+        # send the json data to backend
+        toMatch = requests.post('http://127.0.0.1:5000/csv', json=data)
+                    
+        # print(response.json())
+        # convert the matched mentee data to csv format
+        # get the matched mentee data from backend
+    
+    def convert_csv_to_json(self):
+        # convert the csv data to json format
+        data = dict()
+        mentee_data = self.mentees_df.to_json()
+        mentor_data = self.mentors_df.to_json()
+        data['mentee'] = mentee_data
+        data['mentor'] = mentor_data
+        return data
+        
     def save_matched_mentees_csv(self):
         if hasattr(self, "matched_mentee_df") and self.matched_mentee_df is not None:
             file_name, _ = QFileDialog.getSaveFileName(
