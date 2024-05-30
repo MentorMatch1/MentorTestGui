@@ -91,10 +91,18 @@ class CSVViewer(QMainWindow):
         # make a request to  /csv
         data = self.convert_csv_to_json()
         # send the json data to backend
-        self.response = requests.post('http://0.0.0.0:5000/csv', json=data)
+        self.response = requests.post(
+            'http://0.0.0.0:5000/csv', json=data)
+
         print(self.response.json())
 
-        return self.response.json()
+        if self.response.json() is not None:
+            self.matched_mentee_df = pd.DataFrame(
+                json.loads(self.response.json()['scores']),)
+            print("Successful creation of matched_mentee dataframe")
+
+        else:
+            print("Dataframe creation not successful")
 
     def convert_csv_to_json(self):
         # convert the csv data to json format
@@ -113,7 +121,7 @@ class CSVViewer(QMainWindow):
             )
             if file_name:
                 try:
-                    self.matched_mentee_df.to_csv(file_name, index=False)
+                    self.matched_mentee_df.to_csv(file_name, index=True)
                     self.status_label.setText(
                         f"Matched mentee data saved to {file_name}"
                     )
