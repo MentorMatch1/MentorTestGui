@@ -91,8 +91,10 @@ class CSVViewer(QMainWindow):
         # make a request to  /csv
         data = self.convert_csv_to_json()
         # send the json data to backend
+
+        # current port 5001
         self.response = requests.post(
-            'http://0.0.0.0:5000/csv', json=data)
+            'http://0.0.0.0:5001/csv', json=data)
 
         print(self.response.json())
 

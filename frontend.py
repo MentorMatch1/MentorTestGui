@@ -4,7 +4,6 @@ from widgets import CSVViewer
 
 
 def main():
-
     app = QApplication(sys.argv)
     widget = CSVViewer()
     widget.show()
