@@ -10,7 +10,6 @@ from PySide6.QtWidgets import (
     QWidget,
     QLabel,
     QLineEdit,
-
 )
 import pandas as pd
 import json
@@ -100,7 +99,7 @@ class CSVViewer(QMainWindow):
 
         if self.response.json() is not None:
             self.matched_mentee_df = pd.DataFrame(
-                json.loads(self.response.json()['scores']),)
+                json.loads(self.response.json()['matches']),)
             print("Successful creation of matched_mentee dataframe")
 
         else:

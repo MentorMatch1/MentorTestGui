@@ -39,3 +39,6 @@ COPY . .
 EXPOSE 5001
 
 CMD ["python3", "frontend.py"]
+
+#docker build -t frontend .
+#docker run -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix frontend
