@@ -1,6 +1,7 @@
 from PySide6.QtCore import Qt, QAbstractTableModel, QVariantAnimation, QModelIndex
 from PySide6.QtWidgets import (
     QApplication,
+    QTabWidget,
     QMainWindow,
     QFileDialog,
     QVBoxLayout,
@@ -16,17 +17,21 @@ import json
 import requests
 
 
-class CSVViewer(QMainWindow):
+class CSVViewer2(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.mentors_df = None
+        self.mentees_df = None
 
         self.setWindowTitle("Mentor Matcher")
         self.setGeometry(100, 100, 800, 600)
 
-        self.central_widget = QWidget()
-        self.setCentralWidget(self.central_widget)
+        tab_widget = QTabWidget(self)
+        self.setCentralWidget(tab_widget)
 
         self.layout = QVBoxLayout()
+        self.central_widget = QWidget()
         self.central_widget.setLayout(self.layout)
 
         # figure out what to do with this
@@ -53,11 +58,75 @@ class CSVViewer(QMainWindow):
 
         self.layout.addLayout(button_layout)
 
-        self.mentors_df = None
-        self.mentees_df = None
+        widget_form = QWidget()
+        label_full_name = QLabel("Your full name:")
+
+        self.line_edit = QLineEdit()
+
+        form_layout = QHBoxLayout()
+
+        self.output = QLabel("")
+        v_layout = QVBoxLayout()
+
+        form_layout.addWidget(label_full_name)
+        form_layout.addWidget(self.line_edit)
+        v_layout.addLayout(form_layout)
+        v_layout.addWidget(self.output)
+
+        widget_form.setLayout(v_layout)
+
+        tab_widget.addTab(self.central_widget, "Match Mentees")
+        tab_widget.addTab(widget_form, "Cohort Matching")
 
         self.status_label = QLabel()
         self.layout.addWidget(self.status_label)
+
+        self.apply_styles()
+
+    def apply_styles(self):
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #222;
+            }
+            QTabWidget::pane {
+                border: 1px solid #c4c4c3;
+                background: #222;
+            }
+            QTabBar::tab {
+                background: #222;
+                border: 1px solid #c4c4c3;
+                border-radius: 10px;
+                padding: 10px;
+            }
+            QTabBar::tab:selected {
+                background: #444;
+                border-bottom-color: #222;
+            }
+            QTableWidget {
+                gridline-color: #c4c4c3;
+                font-size: 14px;
+            }
+            QPushButton {
+                background-color: #5a9bd4;
+                color: white;
+                font-size: 16px;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                margin: 5px 0;
+            }
+            QPushButton:hover {
+                background-color: #7db7e3;
+            }
+            QPushButton:pressed {
+                background-color: #497aab;
+            }
+            QLabel {
+                color: #333333;
+                font-size: 14px;
+                margin: 10px 0;
+            }
+        """)
 
     def load_csv(self):
         file_name, _ = QFileDialog.getOpenFileName(

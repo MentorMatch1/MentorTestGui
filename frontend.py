@@ -1,11 +1,11 @@
 import sys
 from PySide6.QtWidgets import QApplication
-from widgets import CSVViewer
+from widgets2 import CSVViewer2
 
 
 def main():
     app = QApplication(sys.argv)
-    widget = CSVViewer()
+    widget = CSVViewer2()
     widget.show()
     app.exec()
 
