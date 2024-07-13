@@ -95,7 +95,7 @@ class CSVViewer(QMainWindow):
         self.response = requests.post(
             'http://0.0.0.0:5001/csv', json=data)
 
-        # print(self.response.json()['matches'])
+        print(self.response.json())
 
         if self.response.json() is not None:
             self.matched_mentee_df = pd.DataFrame(
